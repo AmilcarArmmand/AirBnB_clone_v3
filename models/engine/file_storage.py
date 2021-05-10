@@ -72,7 +72,7 @@ class FileStorage:
     def get(self, cls, id):
         """Method to retrieve one ojbect"""
         if cls is not None and id is not None:
-            key = "{}.{}".format(cls.__name__, id)
+            key = "{}.{}".format(cls, id)
             all_obj = self.all(cls)
             return all_obj.get(key, None)
         else:
