@@ -78,7 +78,7 @@ class DBStorage:
     def get(self, cls, id):
         """Method to retrieve one ojbect"""
         if cls is not None and id is not None:
-            key = "{}.{}".format(cls, id)
+            key = "{}.{}".format(cls.__name__, id)
             all_obj = self.all(cls)
             return all_obj.get(key, None)
         else:
