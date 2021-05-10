@@ -113,3 +113,30 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_all(self):
+        """Test that count returns same number of all objects in FileStorage"""
+        storage = FileStorage()
+        count = storage.count()
+        self.assertEqual(count, len(storage._FileStorage__objects))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_state(self):
+        """Test that count returns same number of State objects"""
+        storage = FileStorage()
+        count = storage.count("State")
+        self.assertEqual(count, len(storage.all("State")))
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_get_state(self):
+        """Test that get returns a specific State object"""
+        storage = FileStorage()
+        first_state_list = list(storage.all("State").values())
+        first_state_id = ""
+        if len(first_state_list) > 0:
+            first_state_id = first_state_list[0].id
+        duplicate = storage.get("State", first_state_id)
+        self.assertIs(type(duplicate),
+                      type(storage.get("State", first_state_id)))
+        self.assertIs(duplicate, storage.get("State", first_state_id))
