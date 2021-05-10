@@ -6,6 +6,7 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, make_response, request, abort
 from models import storage
 from models.state import State
+from models.city import City
 
 
 @app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'],
@@ -25,14 +26,14 @@ def cities_from_state(state_id=None):
         return jsonify(all_cities)
     # ====================================================================
     if request.method == 'POST':
-        json_req = request.get_json()
-        if not json_req:
+        if not request.get_json():
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
-        if 'name' not in json_req:
+        if 'name' not in request.get_json():
             return make_response(jsonify({'error': 'Missing name'}), 400)
-        city = City(**json_req)
-        city.save()
-        return make_response(jsonify(city.to_dict()), 201)
+    city = City(**request.get_json())
+    setattr(city, "state_id", state_id)
+    city.save()
+    return make_response(jsonify(city.to_dict()), 201)
 
 
 @app_views.route('/cities/<city_id>', methods=['GET', 'DELETE', 'PUT'],
