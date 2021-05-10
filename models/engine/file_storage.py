@@ -75,7 +75,7 @@ class FileStorage:
            type(id) is str and cls in classes:
             key = "{}.{}".format(cls, id)
             all_obj = self.all(cls)
-            return all_obj.get(key, None)
+            return all_obj.get(key)
         else:
             return None
 
